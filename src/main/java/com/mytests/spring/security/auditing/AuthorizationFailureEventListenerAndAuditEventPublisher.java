@@ -14,6 +14,7 @@ import java.util.Map;
 public class AuthorizationFailureEventListenerAndAuditEventPublisher extends AbstractAuthorizationAuditListener {
 
     // no publishers are found: org.springframework.security.access.intercept.AbstractSecurityInterceptor.publishEvent() ?
+    // hard to find? no issues are submitted
     @Override
     public void onApplicationEvent(AbstractAuthorizationEvent event) {
         if (event instanceof AuthorizationFailureEvent) {
@@ -29,7 +30,8 @@ public class AuthorizationFailureEventListenerAndAuditEventPublisher extends Abs
         if (event.getAuthentication().getDetails() != null) {
             data.put("details", event.getAuthentication().getDetails());
         }
-        // no publisher gutter icons here
+        // no publisher gutter icons here: no issues are submitted; we shouldn't try to find all methods that call publishEvent() since
+        // this is too expensive, and we can't be sure that these methods are used for publishing really?
         publish(new AuditEvent(event.getAuthentication().getName(), "auth failure",
                                data));
     }

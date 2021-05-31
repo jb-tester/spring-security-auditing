@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditApplicationEventListener {
 
-    // duplicated variants in gutter icon navigation popup: org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener.publish
+    // https://youtrack.jetbrains.com/issue/IDEA-270491: duplicated variants in gutter icon navigation popup: org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener.publish
     @EventListener
     public void onAuditAppEvent(AuditApplicationEvent auditApplicationEvent) {
         AuditEvent auditEvent = auditApplicationEvent.getAuditEvent();

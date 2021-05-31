@@ -22,7 +22,7 @@ public class AuthorizationSuccessEventListenerAndAuditMessagePublisher {
 
     @Autowired  ApplicationEventPublisher publisher;
 
-    @EventListener   // no publishers are found: org.springframework.security.authentication.DefaultAuthenticationEventPublisher.publishAuthenticationSuccess()?
+    @EventListener   // https://youtrack.jetbrains.com/issue/IDEA-270495: no publishers are found until sources are downloaded: org.springframework.security.authentication.DefaultAuthenticationEventPublisher.publishAuthenticationSuccess()?
     public void onAuthSuccessEvent(AuthenticationSuccessEvent event) {
         String name = event.getAuthentication().getName();
         Map<String, Object> data = new HashMap<>();
