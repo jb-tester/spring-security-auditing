@@ -31,12 +31,12 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                // no url paths references here - https://youtrack.jetbrains.com/issue/IDEA-269947
+                // no url paths references here - https://youtrack.jetbrains.com/issue/IDEA-269947 - fixed
                 .antMatchers("/resources/**").permitAll()
-                // no url paths references https://youtrack.jetbrains.com/issue/IDEA-269857
-                // no roles and authorities references https://youtrack.jetbrains.com/issue/IDEA-269955
+                // no url paths references https://youtrack.jetbrains.com/issue/IDEA-269857 - fixed
+                // no roles and authorities references https://youtrack.jetbrains.com/issue/IDEA-269955 - fixed
                 .mvcMatchers("/home").hasAnyAuthority("ROLE_PARENT","ROLE_CHILD")
-                // no regexp autoinjected - https://youtrack.jetbrains.com/issue/IDEA-269970
+                // no regexp autoinjected - https://youtrack.jetbrains.com/issue/IDEA-269970 - fixed
                 .regexMatchers("/secret").hasAnyRole("ADMIN")
                 // no url paths references - nothing is submitted yet, not sure we need to support this case
                 .requestMatchers(new AntPathRequestMatcher("/for_all")).permitAll()
