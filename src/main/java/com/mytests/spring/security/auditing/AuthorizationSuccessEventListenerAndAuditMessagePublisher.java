@@ -1,5 +1,6 @@
 package com.mytests.spring.security.auditing;
 
+import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,7 +27,10 @@ public class AuthorizationSuccessEventListenerAndAuditMessagePublisher {
     public void onAuthSuccessEvent(AuthenticationSuccessEvent event) {
         String name = event.getAuthentication().getName();
         Map<String, Object> data = new HashMap<>();
-        data.put("requestUrl", ((FilterInvocation)event.getSource()).getRequestUrl() );
+        if (event.getSource() instanceof FilterInvocation)
+            data.put("requestUrl", ((FilterInvocation)event.getSource()).getRequestUrl());
+        else if (event.getSource() instanceof ReflectiveMethodInvocation)
+            data.put("source", event.getSource());
         if (event.getAuthentication().getDetails() != null) {
             data.put("details", event.getAuthentication().getDetails());
         }

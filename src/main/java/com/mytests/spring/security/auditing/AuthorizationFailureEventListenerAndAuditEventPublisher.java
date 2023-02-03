@@ -1,5 +1,6 @@
 package com.mytests.spring.security.auditing;
 
+import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.security.AbstractAuthorizationAuditListener;
 import org.springframework.security.access.event.AbstractAuthorizationEvent;
@@ -26,7 +27,10 @@ public class AuthorizationFailureEventListenerAndAuditEventPublisher extends Abs
         Map<String, Object> data = new HashMap<>();
         data.put("type", event.getAccessDeniedException().getClass().getName());
         data.put("message", event.getAccessDeniedException().getMessage());
-        data.put("requestUrl", ((FilterInvocation)event.getSource()).getRequestUrl() );
+        if (event.getSource() instanceof FilterInvocation)
+            data.put("requestUrl", ((FilterInvocation)event.getSource()).getRequestUrl());
+        else if (event.getSource() instanceof ReflectiveMethodInvocation)
+            data.put("source", event.getSource());
         if (event.getAuthentication().getDetails() != null) {
             data.put("details", event.getAuthentication().getDetails());
         }

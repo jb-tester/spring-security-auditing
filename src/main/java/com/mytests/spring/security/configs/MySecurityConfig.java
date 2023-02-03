@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 /**
  * *
  * <p>Created by irina on 31.05.2021.</p>
@@ -33,16 +35,19 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // no url paths references here - https://youtrack.jetbrains.com/issue/IDEA-269947 - fixed
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/").fullyAuthenticated()
+                .antMatchers("/for_adults").hasRole("PARENT")
                 // no url paths references https://youtrack.jetbrains.com/issue/IDEA-269857 - fixed
                 // no roles and authorities references https://youtrack.jetbrains.com/issue/IDEA-269955 - fixed
-                .mvcMatchers("/home").hasAnyAuthority("ROLE_PARENT","ROLE_CHILD")
+                .mvcMatchers("/home").hasAnyAuthority("ROLE_PARENT","ROLE_CHILD","ROLE_ADMIN")
                 // no regexp autoinjected - https://youtrack.jetbrains.com/issue/IDEA-269970 - fixed
-                .regexMatchers("/secret").hasAnyRole("ADMIN")
+                .regexMatchers("/secret","/secure\\d+").hasAnyRole("ADMIN")
                 // no url paths references - nothing is submitted yet, not sure we need to support this case
                 .requestMatchers(new AntPathRequestMatcher("/for_all")).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                .formLogin();
+
 
         ;
     }
